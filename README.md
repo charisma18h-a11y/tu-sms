@@ -5,20 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المنصة الأكاديمية للتنبيهات والجدول</title>
-    <!-- Tailwind CSS للتصميم المريح -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- مكتبة Supabase للربط السحابي -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- مكتبة OneSignal للإشعارات الفورية -->
+    <!-- مكتبة OneSignal للإشعارات الفورية على الجوال -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "ضع_هنا_APP_ID_الخاص_بـ_OneSignal", // اختياري لاحقاً لتفعيل إشعارات الجوال
+          appId: "ضع_هنا_APP_ID_الخاص_بـ_OneSignal", // استبدل هذا النص بمعرف OneSignal الخاص بك لاحقاً
         });
       });
     </script>
@@ -29,7 +26,6 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- الهيدر -->
     <header class="bg-zinc-900 border-b border-zinc-800 py-5 px-4 text-center relative shadow-sm">
         <h1 class="text-xl font-bold text-zinc-100">المنصة الأكاديمية الموحدة</h1>
         <p class="text-zinc-400 text-xs mt-1">متابعة التنبيهات والجدول الدراسي لكافة المواد</p>
@@ -40,13 +36,13 @@
 
     <main class="max-w-2xl w-full mx-auto p-4 flex-grow my-4">
 
-        <!-- تفعيل الإشعارات -->
-        <div class="bg-indigo-950/40 border border-indigo-800/50 p-4 rounded-2xl mb-6 flex justify-between items-center">
+        <!-- زر تفعيل الإشعارات الفورية (تم إصلاحه وتفعيله) -->
+        <div class="bg-indigo-950/40 border border-indigo-800/50 p-4 rounded-2xl mb-6 flex justify-between items-center shadow-lg">
             <div>
                 <h4 class="text-xs font-bold text-indigo-300">📱 تفعيل إشعارات الجوال الفورية</h4>
-                <p class="text-[11px] text-zinc-400 mt-0.5">لتصلك التنبيهات على شاشة جوالك مباشرة</p>
+                <p class="text-[11px] text-zinc-400 mt-0.5">اضغط لتصلك التنبيهات على شاشة جوالك مباشرة</p>
             </div>
-            <button onclick="subscribeNotifications()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-2 rounded-xl font-bold transition">
+            <button onclick="subscribeNotifications()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-md">
                 تفعيل 🔔
             </button>
         </div>
@@ -116,9 +112,9 @@
     <script>
         const ADMIN_PASS = "Tu1143091278";
 
-        // الروابط المباشرة لمشروعك في سوبابيس:
+        // بيانات Supabase الخاصة بك التي أرسلتها:
         const SUPABASE_URL = 'https://hzkoanvnkwwdrpaxgnhj.supabase.co';
-        const SUPABASE_KEY = 'ضع_هنا_Anon_Key_الخاص_بـ_Supabase'; // استبدل هذا النص بمفتاح الـ Anon الخاص بك من إعدادات سوبابيس
+        const SUPABASE_KEY = 'sb_publishable_f0KBqcr-RA1pxNf9tlGsXg_SeyrDKPr'; 
         
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -129,10 +125,20 @@
             loadAnnouncements();
         };
 
+        // دالة تفعيل الإشعارات الفورية
         function subscribeNotifications() {
-            OneSignalDeferred.push(function(OneSignal) {
-                OneSignal.Notifications.requestPermission();
-            });
+            if (typeof OneSignalDeferred !== 'undefined') {
+                OneSignalDeferred.push(async function(OneSignal) {
+                    try {
+                        await OneSignal.Notifications.requestPermission();
+                        alert("تم إرسال طلب إذن الإشعارات بنجاح! 🔔");
+                    } catch (err) {
+                        alert("تأكد من إعداد OneSignal App ID لاستلام الإشعارات على الجوال.");
+                    }
+                });
+            } else {
+                alert("نظام الإشعارات يحمل حالياً، حاول مرة أخرى.");
+            }
         }
 
         function checkStudent() {
@@ -154,16 +160,20 @@
                 return;
             }
 
-            const { data, error } = await _supabase.from('students').insert([{ name, phone }]);
-            if (error) {
-                alert("حدث خطأ أثناء التسجيل: " + error.message);
-                return;
-            }
+            try {
+                const { data, error } = await _supabase.from('students').insert([{ name, phone }]);
+                if (error) {
+                    alert("خطأ من قاعدة البيانات: " + error.message);
+                    return;
+                }
 
-            currentStudent = { name, phone };
-            localStorage.setItem('current_student', JSON.stringify(currentStudent));
-            checkStudent();
-            alert("تم تسجيل بياناتك بنجاح في النظام السحابي!");
+                currentStudent = { name, phone };
+                localStorage.setItem('current_student', JSON.stringify(currentStudent));
+                checkStudent();
+                alert("تم تسجيل بياناتك بنجاح في النظام السحابي!");
+            } catch (err) {
+                alert("حدث خطأ في الاتصال بالسحابة.");
+            }
         }
 
         function logoutStudent() {
@@ -172,32 +182,34 @@
         }
 
         async function loadAnnouncements() {
-            const { data, error } = await _supabase.from('announcements').select('*').order('id', { ascending: false });
-            if (error) return;
+            try {
+                const { data, error } = await _supabase.from('announcements').select('*').order('id', { ascending: false });
+                if (error) return;
 
-            const container = document.getElementById('announcementsList');
-            container.innerHTML = '';
+                const container = document.getElementById('announcementsList');
+                container.innerHTML = '';
 
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p class="text-center text-zinc-505 py-6 text-xs">لا توجد تنبيهات حالية.</p>';
-                return;
-            }
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p class="text-center text-zinc-500 py-6 text-xs">لا توجد تنبيهات حالية.</p>';
+                    return;
+                }
 
-            data.forEach(post => {
-                container.innerHTML += `
-                    <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="bg-indigo-900/60 text-indigo-300 border border-indigo-700/50 font-bold px-2.5 py-0.5 rounded-md text-[11px]">${post.subject}</span>
-                            <span class="text-[10px] text-zinc-500">${post.date}</span>
+                data.forEach(post => {
+                    container.innerHTML += `
+                        <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-indigo-900/60 text-indigo-300 border border-indigo-700/50 font-bold px-2.5 py-0.5 rounded-md text-[11px]">${post.subject}</span>
+                                <span class="text-[10px] text-zinc-500">${post.date}</span>
+                            </div>
+                            <p class="text-xs text-zinc-300 leading-relaxed">${post.content}</p>
                         </div>
-                        <p class="text-xs text-zinc-300 leading-relaxed">${post.content}</p>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            } catch (e) {}
         }
 
         function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        function closeAdminModal() { document.getElementById('adminModal'].classList.add('hidden'); }
 
         function verifyAdmin() {
             const pass = document.getElementById('adminPassInput').value;
@@ -214,7 +226,7 @@
             const { data } = await _supabase.from('students').select('*');
             const listDisplay = document.getElementById('registeredStudentsDisplay');
             listDisplay.innerHTML = '';
-            if (data) {
+            if, (data) {
                 data.forEach(st => {
                     listDisplay.innerHTML += `<div class="p-1 border-b border-zinc-800 flex justify-between"><span>${st.name}</span> <span class="text-zinc-600">${st.phone}</span></div>`;
                 });
