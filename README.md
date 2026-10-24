@@ -1,5 +1,4 @@
 # tu-sms
-
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +14,7 @@
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "ضع_هنا_APP_ID_الخاص_بـ_OneSignal", // استبدل هذا النص بمعرف OneSignal الخاص بك لاحقاً
+          appId: "ضع_هنا_APP_ID_الخاص_بـ_OneSignal", 
         });
       });
     </script>
@@ -29,20 +28,20 @@
     <header class="bg-zinc-900 border-b border-zinc-800 py-5 px-4 text-center relative shadow-sm">
         <h1 class="text-xl font-bold text-zinc-100">المنصة الأكاديمية الموحدة</h1>
         <p class="text-zinc-400 text-xs mt-1">متابعة التنبيهات والجدول الدراسي لكافة المواد</p>
-        <button onclick="openAdminModal()" class="absolute left-4 top-4 bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300 px-3 py-1.5 rounded-lg border border-zinc-700 transition">
+        <button onclick="openAdminModal()" class="absolute left-4 top-4 bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300 px-3 py-1.5 rounded-lg border border-zinc-700 transition cursor-pointer">
             🔐 الأدمن
         </button>
     </header>
 
     <main class="max-w-2xl w-full mx-auto p-4 flex-grow my-4">
 
-        <!-- زر تفعيل الإشعارات الفورية (تم إصلاحه وتفعيله) -->
+        <!-- زر تفعيل الإشعارات الفورية -->
         <div class="bg-indigo-950/40 border border-indigo-800/50 p-4 rounded-2xl mb-6 flex justify-between items-center shadow-lg">
             <div>
                 <h4 class="text-xs font-bold text-indigo-300">📱 تفعيل إشعارات الجوال الفورية</h4>
                 <p class="text-[11px] text-zinc-400 mt-0.5">اضغط لتصلك التنبيهات على شاشة جوالك مباشرة</p>
             </div>
-            <button onclick="subscribeNotifications()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-md">
+            <button onclick="subscribeNotifications()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition shadow-md cursor-pointer">
                 تفعيل 🔔
             </button>
         </div>
@@ -54,7 +53,7 @@
             <div class="space-y-3">
                 <input type="text" id="regName" placeholder="الاسم الثلاثي" class="w-full p-2.5 text-xs bg-zinc-800 border border-zinc-700 rounded-xl text-zinc-100 outline-none">
                 <input type="tel" id="regPhone" placeholder="رقم الجوال (05xxxxxxxx)" class="w-full p-2.5 text-xs bg-zinc-800 border border-zinc-700 rounded-xl text-zinc-100 outline-none">
-                <button onclick="registerStudentToSupabase()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs">
+                <button onclick="registerStudentToSupabase()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs cursor-pointer">
                     حفظ البيانات والدخول
                 </button>
             </div>
@@ -67,7 +66,7 @@
                 <h3 id="displayStudentName" class="font-bold text-zinc-200 text-sm"></h3>
                 <span id="displayStudentPhone" class="text-xs text-zinc-400"></span>
             </div>
-            <button onclick="logoutStudent()" class="text-xs text-red-400 hover:underline">تعديل بياناتي</button>
+            <button onclick="logoutStudent()" class="text-xs text-red-400 hover:underline cursor-pointer">تعديل بياناتي</button>
         </div>
 
         <!-- التنبيهات -->
@@ -85,20 +84,20 @@
             <div id="adminAuthSection">
                 <h3 class="text-sm font-bold text-zinc-200 mb-4">تسجيل دخول الأدمن</h3>
                 <input type="password" id="adminPassInput" placeholder="أدخل كلمة المرور" class="w-full p-2.5 text-xs bg-zinc-800 border border-zinc-700 rounded-xl mb-3 text-zinc-100 outline-none">
-                <button onclick="verifyAdmin()" class="w-full bg-indigo-600 text-white py-2 rounded-xl text-xs font-bold">دخول</button>
+                <button onclick="verifyAdmin()" class="w-full bg-indigo-600 text-white py-2 rounded-xl text-xs font-bold cursor-pointer">دخول</button>
             </div>
 
             <div id="adminControls" class="hidden space-y-4">
                 <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                     <h3 class="font-bold text-indigo-400 text-sm">لوحة تحكم الأدمن</h3>
-                    <button onclick="closeAdminModal()" class="text-xs text-zinc-500">إغلاق ✖</button>
+                    <button onclick="closeAdminModal()" class="text-xs text-zinc-500 cursor-pointer">إغلاق ✖</button>
                 </div>
 
                 <div class="bg-zinc-800/50 p-3 rounded-xl border border-zinc-800">
                     <h4 class="text-xs font-bold text-zinc-300 mb-2">إضافة تنبيه جديد</h4>
                     <input type="text" id="postSubject" placeholder="اسم المادة (مثال: فيزياء / شعبة 1820)" class="w-full p-2 text-xs bg-zinc-900 border border-zinc-700 rounded-lg mb-2 text-zinc-100">
                     <textarea id="postContent" placeholder="نص التنبيه..." class="w-full p-2 text-xs bg-zinc-900 border border-zinc-700 rounded-lg mb-2 h-20 text-zinc-100"></textarea>
-                    <button onclick="publishAnnouncementToSupabase()" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold">نشر التنبيه للجميع 📣</button>
+                    <button onclick="publishAnnouncementToSupabase()" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold cursor-pointer">نشر التنبيه للجميع 📣</button>
                 </div>
 
                 <div>
@@ -112,7 +111,6 @@
     <script>
         const ADMIN_PASS = "Tu1143091278";
 
-        // بيانات Supabase الخاصة بك التي أرسلتها:
         const SUPABASE_URL = 'https://hzkoanvnkwwdrpaxgnhj.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_f0KBqcr-RA1pxNf9tlGsXg_SeyrDKPr'; 
         
@@ -125,7 +123,6 @@
             loadAnnouncements();
         };
 
-        // دالة تفعيل الإشعارات الفورية
         function subscribeNotifications() {
             if (typeof OneSignalDeferred !== 'undefined') {
                 OneSignalDeferred.push(async function(OneSignal) {
@@ -133,7 +130,7 @@
                         await OneSignal.Notifications.requestPermission();
                         alert("تم إرسال طلب إذن الإشعارات بنجاح! 🔔");
                     } catch (err) {
-                        alert("تأكد من إعداد OneSignal App ID لاستلام الإشعارات على الجوال.");
+                        alert("تأكد من إعداد OneSignal App ID لاستلام الإشعارات.");
                     }
                 });
             } else {
@@ -208,8 +205,13 @@
             } catch (e) {}
         }
 
-        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
-        function closeAdminModal() { document.getElementById('adminModal'].classList.add('hidden'); }
+        function openAdminModal() { 
+            document.getElementById('adminModal').classList.remove('hidden'); 
+        }
+        
+        function closeAdminModal() { 
+            document.getElementById('adminModal').classList.add('hidden'); 
+        }
 
         function verifyAdmin() {
             const pass = document.getElementById('adminPassInput').value;
@@ -226,7 +228,7 @@
             const { data } = await _supabase.from('students').select('*');
             const listDisplay = document.getElementById('registeredStudentsDisplay');
             listDisplay.innerHTML = '';
-            if, (data) {
+            if (data) {
                 data.forEach(st => {
                     listDisplay.innerHTML += `<div class="p-1 border-b border-zinc-800 flex justify-between"><span>${st.name}</span> <span class="text-zinc-600">${st.phone}</span></div>`;
                 });
