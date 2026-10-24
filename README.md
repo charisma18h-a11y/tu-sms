@@ -1,20 +1,29 @@
 # tu-sms
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المنصة الأكاديمية للتنبيهات والجدول</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- مكتبة OneSignal للإشعارات الفورية على الجوال -->
+    <!-- OneSignal Web SDK v16 Integration -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "ضع_هنا_APP_ID_الخاص_بـ_OneSignal", 
+          appId: "0f93f224-90fc-46ba-912f-1211601664bb",
+          safari_web_id: "web.onesignal.auto.0f93f224-90fc-46ba-912f-1211601664bb",
+          notifyButton: {
+            enable: false, // نستخدم زر التفعيل المخصص داخل الواجهة
+          },
+          allowLocalhostAsSecureOrigin: true,
         });
       });
     </script>
@@ -25,6 +34,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
+    <!-- الهيدر -->
     <header class="bg-zinc-900 border-b border-zinc-800 py-5 px-4 text-center relative shadow-sm">
         <h1 class="text-xl font-bold text-zinc-100">المنصة الأكاديمية الموحدة</h1>
         <p class="text-zinc-400 text-xs mt-1">متابعة التنبيهات والجدول الدراسي لكافة المواد</p>
@@ -123,18 +133,18 @@
             loadAnnouncements();
         };
 
+        // دالة تفعيل طلب الإشعارات الفورية
         function subscribeNotifications() {
             if (typeof OneSignalDeferred !== 'undefined') {
                 OneSignalDeferred.push(async function(OneSignal) {
                     try {
                         await OneSignal.Notifications.requestPermission();
-                        alert("تم إرسال طلب إذن الإشعارات بنجاح! 🔔");
                     } catch (err) {
-                        alert("تأكد من إعداد OneSignal App ID لاستلام الإشعارات.");
+                        console.error("OneSignal permission error:", err);
                     }
                 });
             } else {
-                alert("نظام الإشعارات يحمل حالياً، حاول مرة أخرى.");
+                alert("نظام الإشعارات يحمل حالياً، يرجى المحاولة بعد ثوانٍ.");
             }
         }
 
