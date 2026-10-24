@@ -1,10 +1,10 @@
 # tu-sms
- <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إعلانات شعبة 1820 - د. محمد الطويرقي</title>
+    <title> الاعلانات العاجلة </title>
     <!-- Tailwind CSS للتصميم السريع والأنيق -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
